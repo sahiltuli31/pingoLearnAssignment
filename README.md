@@ -1,4 +1,8 @@
-# pingo_learn_assignment
+#Comments App
+- Include Firebase Authentication
+- Usage of Firebase config
+- Usage of provider for state management
+  
 
 
 A few resources to get you started if this is your first Flutter project:
