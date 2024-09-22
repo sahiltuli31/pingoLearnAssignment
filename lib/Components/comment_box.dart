@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:pingo_learn_assignment/Components/comment_box_text.dart';
+import 'package:pingo_learn_assignment/Utils/field_validation.dart';
+import 'package:pingo_learn_assignment/Utils/firebase_config/firebase_remote_config_service.dart';
 import 'package:pingo_learn_assignment/constants/dimensions.dart';
 import 'package:pingo_learn_assignment/constants/text.dart';
 
-class CommentsBox extends StatelessWidget {
+class CommentsBox extends StatefulWidget {
   final String name;
   final String email;
   final String comment;
@@ -13,6 +15,28 @@ class CommentsBox extends StatelessWidget {
       required this.email,
       required this.comment});
 
+  @override
+  State<CommentsBox> createState() => _CommentsBoxState();
+}
+
+class _CommentsBoxState extends State<CommentsBox> {
+  final remoteConfig = FirebaseRemoteConfigService();
+  String userEmail = "";
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    userEmail = widget.email;
+    checkMask();
+  }
+  void checkMask(){
+    String flag = remoteConfig.getString(FirebaseRemoteConfigKeys.emailMasking).toString();
+    if(flag == 'true'){
+      setState(() {
+        userEmail = FieldValidation.maskEmail(widget.email);
+      });
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -33,7 +57,7 @@ class CommentsBox extends StatelessWidget {
                 color: Colors.grey,
               ),
               child: Text(
-                name[0].toUpperCase(),
+                widget.name[0].toUpperCase(),
                 style:
                      TextStyle(fontSize: PLDimens.pl25, fontWeight: FontWeight.w800),
               ),
@@ -45,10 +69,10 @@ class CommentsBox extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  CommentBoxText(label: PLTexts.name, text: name),
-                  CommentBoxText(label: PLTexts.email, text: email),
+                  CommentBoxText(label: PLTexts.name, text: widget.name),
+                  CommentBoxText(label: PLTexts.email, text: userEmail),
                   Text(
-                    comment,
+                    widget.comment,
                     maxLines: 4,
                     overflow: TextOverflow.ellipsis,
                     softWrap: true,

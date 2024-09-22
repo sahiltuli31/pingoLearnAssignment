@@ -8,6 +8,7 @@ import 'package:pingo_learn_assignment/screens/authenticaion/login_screen.dart';
 import 'package:pingo_learn_assignment/screens/authenticaion/signup_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'Utils/firebase_config/firebase_remote_config_service.dart';
 import 'firebase_options.dart';
 void main() {
   runApp(const MyApp());
@@ -33,6 +34,7 @@ class _MyAppState extends State<MyApp> {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
+    await FirebaseRemoteConfigService().initialize();
   }
   @override
   Widget build(BuildContext context) {

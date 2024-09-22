@@ -42,4 +42,26 @@ class FieldValidation {
     }
     return true;
   }
+
+  static String maskEmail(String email) {
+
+    final parts = email.split('@');
+
+
+    if (parts.length != 2) return email; // Return as is if it's not a valid email
+
+    final localPart = parts[0];
+    final domainPart = parts[1];
+
+
+    if (localPart.length <= 3) {
+
+      return email;
+    } else {
+
+      final maskedLocalPart = '${localPart.substring(0, 3)}${'*' * (localPart.length - 3)}';
+      return '$maskedLocalPart@$domainPart';
+    }
+  }
+
 }
